@@ -1,11 +1,10 @@
-import numpy as np
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import MinMaxScaler
-from tensorflow import keras
 from tensorflow.keras import Sequential
 from tensorflow.keras.layers import Dense
 import matplotlib.pyplot as plt
+
 # Load the dataset
 data = pd.read_csv('Admission_Predict_Ver1.1.csv')
 # Display the first few rows of the dataset
