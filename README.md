@@ -1,6 +1,6 @@
 # Graduate Admission Prediction using Neural Networks
 
-## 📌 Project Overview
+##  Project Overview
 
 This project builds a **regression model using a neural network** to predict the **Chance of Admission** for graduate students.
 The dataset includes features such as **GRE Score, TOEFL Score, University Rating, SOP, LOR, CGPA, and Research Experience**.
