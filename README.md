@@ -2,18 +2,19 @@
 
 ##  Project Overview
 
-This project builds a **regression model using a neural network** to predict the **Chance of Admission** for graduate students.
-The dataset includes features such as **GRE Score, TOEFL Score, University Rating, SOP, LOR, CGPA, and Research Experience**.
+This project builds and deploys a **neural network regression model** to predict the **Chance of Admission** for graduate students.
+It has two components:
 
-The goal is to train a model that can predict the probability of admission based on these factors.
+1. **Model Training (`train_model.py`)** – trains a neural network on the dataset and saves the model + scaler.
+2. **Prediction App (`predict_app.py`)** – a simple GUI (Tkinter) where users enter their scores and get admission chance predictions in real time.
 
 ---
 
-## Dataset
+##  Dataset
 
 * **File:** `Admission_Predict_Ver1.1.csv`
-* **Source:** Graduate Admission dataset (commonly available on Kaggle / UCI ML repository).
-* **Target variable:** `Chance of Admit`
+* **Source:** Graduate Admission dataset (Kaggle / UCI ML repository).
+* **Target Variable:** `Chance of Admit`
 * **Features:**
 
   * GRE Score
@@ -26,65 +27,83 @@ The goal is to train a model that can predict the probability of admission based
 
 ---
 
-##  Steps in the Code
+##  Steps in Training (`train_model.py`)
 
-1. **Load and inspect dataset**
+1. Load and clean dataset (drop irrelevant columns).
+2. Preprocess:
 
-   * Read CSV file
-   * Check for missing values
-   * Drop irrelevant column (`Serial No.`)
-
-2. **Preprocessing**
-
-   * Separate features (`X`) and target (`y`)
-   * Train-test split (80% train, 20% test)
+   * Split train/test
    * Normalize features using `MinMaxScaler`
+3. Build Neural Network:
 
-3. **Model Architecture**
+   * Dense(64, ReLU) → Dense(32, ReLU) → Dense(1, Linear)
+4. Compile with:
 
-   * Input layer: matches number of features
-   * Hidden layers:
+   * Loss = Mean Squared Error (MSE)
+   * Optimizer = Adam
+   * Metric = Mean Absolute Error (MAE)
+5. Train for **50 epochs** with validation split.
+6. Save:
 
-     * Dense(64, ReLU)
-     * Dense(32, ReLU)
-   * Output layer: Dense(1, Linear) → regression output
+   * Trained model (`admission_model.keras`)
+   * Scaler (`scaler.pkl`)
+7. Plot training curves (Loss & MAE).
 
-4. **Compilation**
+---
 
-   * Loss: Mean Squared Error (MSE)
-   * Optimizer: Adam
-   * Metric: Mean Absolute Error (MAE)
+## 🖥 Prediction App (`predict_tk.py`)
 
-5. **Training**
-
-   * 50 epochs
-   * 20% of training data used for validation
-
-6. **Evaluation**
-
-   * Test set evaluation with MAE
-   * Visualization of training/validation loss & MAE
+* **Framework:** Tkinter (Python built-in GUI).
+* **Inputs:** GRE, TOEFL, Rating, SOP, LOR, CGPA, Research.
+* **Outputs:** Predicted admission probability (0–1).
+* **Extra:** Displays status message (High / Moderate / Low chance).
 
 ---
 
 ##  Results
 
-* The model outputs **Mean Absolute Error (MAE)** on test data.
-* Training and validation curves are plotted to visualize model performance.
+* Model achieves reasonable prediction accuracy (measured by MAE).
+* Training and validation curves show learning progress.
+* GUI allows easy “what-if” analysis of admission chances.
 
 ---
 
 ##  How to Run
 
-1. Clone the repository / copy the script.
-2. Place the dataset file (`Admission_Predict_Ver1.1.csv`) in the same directory.
-3. Install dependencies:
+### 1. Train the Model
 
-   ```bash
-   pip install pandas scikit-learn tensorflow matplotlib
-   ```
-4. Run the script:
+```bash
+python train_model.py
+```
 
-   ```bash
-   python admission_prediction.py
-   ```
+This will generate:
+
+* `admission_model.keras` (trained model)
+* `scaler.pkl` (normalization scaler)
+
+### 2. Run the GUI
+
+```bash
+python predict_tk.py
+```
+
+Enter your scores in the form, click **Predict**, and see your estimated chance of admission.
+
+---
+
+##  Requirements
+
+Install required libraries:
+
+```bash
+pip install pandas scikit-learn tensorflow matplotlib joblib
+```
+
+Tkinter comes pre-installed with Python (no extra install needed).
+
+---
+
+##  Notes
+
+* If you already have a model in `.h5` format, it will still work — but `.keras` is recommended for Keras 3.x+.
+* Make sure `admission_model.keras` (or `.h5`) and `scaler.pkl` are in the same directory as `predict_tk.py`.
